@@ -1,0 +1,514 @@
+
+:root {
+    --bg-dark-overlay: rgba(15, 23, 42, 0.6);
+    --card-glass: rgba(23, 32, 51, 0.75);
+    --border-glass: rgba(255, 255, 255, 0.07);
+    --text-muted: #8a99ad;
+    --accent-blue: #0099ff;
+    --odds-cyan: #4cc3ff;
+    --coin-gold: #ffb800;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+    background: #050b14;
+    /* Replicating your custom compound background pattern styling */
+    background-image: linear-gradient(rgba(5, 11, 20, 0.85), rgba(5, 11, 20, 0.85)), url('1.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.glass {
+    background: rgba(23, 32, 51, 0.85);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid var(--border-glass);
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 2px solid rgba(56, 189, 248, 0.9);
+    outline-offset: 3px;
+}
+
+/* Page Visibility Manager */
+.page-view {
+    display: none;
+    width: 100%;
+    animation: fadeIn 0.4s ease-in-out forwards;
+}
+.page-view.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Auth Card Styles */
+.login-card {
+    background: var(--card-glass);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 520px;
+    padding: 45px 40px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.logo-title {
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--accent-blue);
+    letter-spacing: 0.5px;
+}
+.logo-title span, .logo-title-sm span {
+    color: #ffffff;
+}
+
+.tagline {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin-top: 8px;
+    margin-bottom: 35px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 22px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.input-group input {
+    width: 100%;
+    background: rgba(13, 20, 35, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.2s;
+}
+.input-group input:focus {
+    border-color: var(--accent-blue);
+}
+
+.btn-primary {
+    width: 100%;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+.btn-primary:hover {
+    background: #0088ee;
+}
+
+/* Dashboard Styles */
+.dashboard-container {
+    width: 100%;
+    max-width: 1100px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.main-header {
+    background: rgba(20, 29, 47, 0.7);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-title-sm {
+    font-size: 22px;
+    color: var(--accent-blue);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.coin-badge {
+    background: rgba(10, 15, 28, 0.9);
+    border: 1px solid var(--coin-gold);
+    padding: 6px 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--coin-gold);
+}
+
+.control-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+}
+.control-btn:hover { color: #fff; }
+
+/* Boost Module */
+.boost-banner {
+    background: rgba(20, 29, 47, 0.4);
+    border: 1px solid rgba(0, 153, 255, 0.35);
+    border-radius: 16px;
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.boost-text h3 { font-size: 16px; margin-bottom: 2px; }
+.boost-text p { color: var(--text-muted); font-size: 13px; }
+
+.btn-boost {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--text-muted);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-boost:hover {
+    background: white;
+    color: #050b14;
+}
+
+/* Fixtures List Arrangement */
+.section-title {
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-top: 10px;
+}
+
+.player-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    flex-shrink: 0;
+}
+
+.market-section {
+    border-top: 1px solid rgba(148, 163, 184, 0.12);
+    padding-top: 1rem;
+}
+
+.market-card {
+    background: rgba(15, 23, 42, 0.8);
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.market-card:hover,
+.market-card.active-market {
+    transform: translateY(-1px);
+    border-color: #38bdf8;
+    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.12);
+}
+
+.player-link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #ffffff;
+    text-decoration: none;
+}
+.player-link:hover {
+    color: #38bdf8;
+}
+
+#player-page .btn-secondary {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+#player-rating-form input {
+    width: 100%;
+}
+
+#player-overall-rating {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.fixtures-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 20px;
+}
+
+.match-card {
+    background: rgba(20, 29, 47, 0.6);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-glass);
+    border-radius: 20px;
+    padding: 24px;
+}
+
+.league-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+}
+
+.vs-block {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.team-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.team-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #101929;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.team-label {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+/* Actionable Odds Buttons layout configuration */
+.odds-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.odd-option {
+    background: #0d1423;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    padding: 12px;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s;
+}
+
+.odd-option span:first-child { color: var(--text-muted); }
+.odd-option span:last-child { color: var(--odds-cyan); }
+
+.odd-option:hover {
+    border-color: var(--accent-blue);
+    background: #131d33;
+}
+
+@media(max-width: 500px) {
+    .fixtures-grid { grid-template-columns: 1fr; }
+}
+
+.market-card {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.market-card:hover,
+.market-card.active-market {
+    border-color: rgba(56, 189, 248, 0.65);
+    transform: translateY(-1px);
+    box-shadow: 0 16px 40px rgba(56, 189, 248, 0.08);
+}
+
+.btn-secondary {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    color: #dbeafe;
+    font-weight: 700;
+}
+
+.btn-primary {
+    background: #0099ff;
+    border: none;
+    color: white;
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background: #0085e0;
+}
+
+@media (max-width: 900px) {
+    body {
+        background-attachment: scroll;
+        padding: 12px;
+    }
+
+    .glass,
+    .login-card,
+    .main-header,
+    .boost-banner,
+    .match-card,
+    .market-card,
+    #match-page,
+    #player-page,
+    #bets-section,
+    #admin-panel,
+    #full-ranking-panel {
+        width: 100%;
+        max-width: 100%;
+        padding: 18px;
+        border-radius: 24px;
+    }
+
+    .dashboard-container {
+        padding: 12px;
+        max-width: 100%;
+    }
+
+    .main-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .header-actions {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .boost-banner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .fixtures-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .odds-actions {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .player-link {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .team-row {
+        gap: 10px;
+    }
+
+    .vs-block {
+        gap: 12px;
+    }
+
+    .league-tag,
+    .team-label,
+    .market-card p,
+    .odd-option {
+        font-size: 14px;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-boost,
+    .market-card button,
+    .odd-option {
+        width: 100%;
+    }
+
+    #login-page,
+    #dashboard,
+    #match-page,
+    #player-page {
+        margin: 0 auto;
+    }
+}
