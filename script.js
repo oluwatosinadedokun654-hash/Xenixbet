@@ -1276,7 +1276,7 @@ function renderMatches() {
   }
 
   // 2. Open AdSterra Smartlink in a new tab
-  window.open('https://www.profitableratecpmnetwork.com/muaf8yyvgq?key=8d6116d3f58e2b013f77335159772d4a');
+  window.open('https://www.profitableratecpmnetwork.com/muaf8yyvgq?key=8d6116d3f58e2b013f77335159772d4a', '_blank');
 
   // 3. Update ad views count and add +2 coins
   adViews += 1;
@@ -1306,8 +1306,5 @@ function renderMatches() {
   // 6. Show notification popup
   alert(`+2 Coins added! You have ${5 - adViews} ad views left today.`);
   }
-
-  }
-
 
         
