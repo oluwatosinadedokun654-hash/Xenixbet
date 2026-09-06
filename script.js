@@ -1264,24 +1264,24 @@ function renderMatches() {
             </div>
         </div>
     `}).join('');
-}
-function watchAdReward() {
-  // 1. Retrieve current coins (default to 0 if not set)
-  let currentCoins = parseInt(localStorage.getItem('userCoins')) || 0;
-  
-  // 2. Add 10 coins
-  currentCoins += 2;
-  
-  // 3. Save new total back to localStorage
-  localStorage.setItem('userCoins', currentCoins);
-  
-  // 4. Update the coin display element on your page
-  const coinDisplay = document.getElementById('coin-balance');
-  if (coinDisplay) {
-    coinDisplay.textContent = currentCoins;
   }
   
-  // 5. Alert or notify the user
-  alert('You earned +2 Coins for watching an ad!');
-                                                }
+  function watchAdReward() {
+    // 1. Opens the AdSterra ad in a new browser tab
+    window.open('https://www.profitableratecpmnetwork.com/muaf8yyvgq?key=8d6116d3f58e2b013f77335159772d4a');
+
+    // 2. Adds +2 coins to user balance
+    let currentCoins = parseInt(localStorage.getItem('userCoins')) || 0;
+    currentCoins += 2;
+    localStorage.setItem('userCoins', currentCoins);
+    
+    // 3. Updates the coin balance text on screen
+    const coinDisplay = document.getElementById('coin-balance');
+    if (coinDisplay) {
+      coinDisplay.textContent = currentCoins;
+    }
+    
+    alert('You earned +2 Coins!');
+  }
+
         
