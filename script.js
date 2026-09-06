@@ -1267,21 +1267,40 @@ function renderMatches() {
   }
   
   function watchAdReward() {
-    // 1. Opens the AdSterra ad in a new browser tab
-    window.open('https://www.profitableratecpmnetwork.com/muaf8yyvgq?key=8d6116d3f58e2b013f77335159772d4a');
+  // 1. Check remaining daily views (default to 5 views per day)
+  let remainingViews = parseInt(localStorage.getItem('adViewsLeft')) ?? 5;
 
-    // 2. Adds +2 coins to user balance
-    let currentCoins = parseInt(localStorage.getItem('userCoins')) || 0;
-    currentCoins += 2;
-    localStorage.setItem('userCoins', currentCoins);
-    
-    // 3. Updates the coin balance text on screen
-    const coinDisplay = document.getElementById('coin-balance');
-    if (coinDisplay) {
-      coinDisplay.textContent = currentCoins;
-    }
-    
-    alert('You earned +2 Coins!');
+  if (remainingViews <= 0) {
+    alert('You have reached your daily ad limit! Come back tomorrow.');
+    return;
   }
+
+  // 2. Open AdSterra Smartlink in a new tab
+  window.open('https://www.profitableratecpmnetwork.com/muaf8yyvgq?key=8d6116d3f58e2b013f77335159772d4a');
+
+  // 3. Decrement views left & increment coins
+  remainingViews -= 1;
+  let currentCoins = parseInt(localStorage.getItem('userCoins')) || 0;
+  currentCoins += 2;
+
+  // 4. Save updated values to localStorage
+  localStorage.setItem('adViewsLeft', remainingViews);
+  localStorage.setItem('userCoins', currentCoins);
+
+  // 5. Update UI displays on screen
+  const coinDisplay = document.getElementById('coin-balance');
+  if (coinDisplay) {
+    coinDisplay.textContent = currentCoins;
+  }
+
+  const viewsDisplay = document.getElementById('ad-views-left');
+  if (viewsDisplay) {
+    viewsDisplay.textContent = remainingViews;
+  }
+
+  // 6. Notify user
+  alert(`You earned +2 Coins! Remaining ad views today: ${remainingViews}`);
+  }
+
 
         
