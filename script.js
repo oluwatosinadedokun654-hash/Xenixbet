@@ -1265,3 +1265,23 @@ function renderMatches() {
         </div>
     `}).join('');
 }
+function watchAdReward() {
+  // 1. Retrieve current coins (default to 0 if not set)
+  let currentCoins = parseInt(localStorage.getItem('userCoins')) || 0;
+  
+  // 2. Add 10 coins
+  currentCoins += 10;
+  
+  // 3. Save new total back to localStorage
+  localStorage.setItem('userCoins', currentCoins);
+  
+  // 4. Update the coin display element on your page
+  const coinDisplay = document.getElementById('coin-balance');
+  if (coinDisplay) {
+    coinDisplay.textContent = currentCoins;
+  }
+  
+  // 5. Alert or notify the user
+  alert('You earned +10 Coins for watching an ad!');
+                                                }
+        
