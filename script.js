@@ -1270,7 +1270,7 @@ function watchAdReward() {
   let currentCoins = parseInt(localStorage.getItem('userCoins')) || 0;
   
   // 2. Add 10 coins
-  currentCoins += 10;
+  currentCoins += 2;
   
   // 3. Save new total back to localStorage
   localStorage.setItem('userCoins', currentCoins);
@@ -1282,6 +1282,6 @@ function watchAdReward() {
   }
   
   // 5. Alert or notify the user
-  alert('You earned +10 Coins for watching an ad!');
+  alert('You earned +2 Coins for watching an ad!');
                                                 }
         
