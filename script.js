@@ -1267,39 +1267,46 @@ function renderMatches() {
   }
   
   function watchAdReward() {
-  // 1. Check remaining daily views (default to 5 views per day)
-  let remainingViews = parseInt(localStorage.getItem('adViewsLeft')) ?? 5;
+  // 1. Get current ad views count
+  let adViews = parseInt(localStorage.getItem('adViews')) || 0;
 
-  if (remainingViews <= 0) {
-    alert('You have reached your daily ad limit! Come back tomorrow.');
+  if (adViews >= 5) {
+    alert('Daily ad limit reached! Check back tomorrow.');
     return;
   }
 
   // 2. Open AdSterra Smartlink in a new tab
-  window.open('https://www.profitableratecpmnetwork.com/muaf8yyvgq?key=8d6116d3f58e2b013f77335159772d4a');
+  window.open('https://www.profitableratecpm.com/YOUR_CODE_HERE', '_blank');
 
-  // 3. Decrement views left & increment coins
-  remainingViews -= 1;
+  // 3. Update ad views count and add +2 coins
+  adViews += 1;
   let currentCoins = parseInt(localStorage.getItem('userCoins')) || 0;
   currentCoins += 2;
 
-  // 4. Save updated values to localStorage
-  localStorage.setItem('adViewsLeft', remainingViews);
+  // 4. Save to localStorage
+  localStorage.setItem('adViews', adViews);
   localStorage.setItem('userCoins', currentCoins);
 
-  // 5. Update UI displays on screen
+  // 5. Instantly update the button text and header coins on screen
+  const adBtn = document.getElementById('ad-btn');
+  if (adBtn) {
+    const left = 5 - adViews;
+    adBtn.textContent = `Watch Ad (+2 Coins) · ${left} left`;
+    if (left <= 0) {
+      adBtn.disabled = true;
+      adBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+  }
+
   const coinDisplay = document.getElementById('coin-balance');
   if (coinDisplay) {
     coinDisplay.textContent = currentCoins;
   }
 
-  const viewsDisplay = document.getElementById('ad-views-left');
-  if (viewsDisplay) {
-    viewsDisplay.textContent = remainingViews;
+  // 6. Show notification popup
+  alert(`+2 Coins added! You have ${5 - adViews} ad views left today.`);
   }
 
-  // 6. Notify user
-  alert(`You earned +2 Coins! Remaining ad views today: ${remainingViews}`);
   }
 
 
