@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XENIXbet - Multi-Campus Admin Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+
+    <!-- AUTH SCREEN -->
+    <div id="auth-screen" class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl w-full max-w-md shadow-2xl">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-black text-cyan-400 tracking-wider uppercase">XENIXbet Admin</h1>
+                <p class="text-xs text-slate-400 mt-1">Multi-Campus Management Control</p>
+            </div>
+            
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Access Key</label>
+                    <input type="password" id="admin-pass" placeholder="Enter Admin Password" required 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-slate-100 focus:outline-none focus:border-cyan-500 transition">
+                </div>
+                <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-lg transition uppercase tracking-wider text-sm">
+                    Authenticate
+                </button>
+                <p id="auth-error" class="text-red-500 text-xs text-center hidden">Invalid Access Key</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN ADMIN DASHBOARD -->
+    <div id="admin-dashboard" class="hidden min-h-screen flex flex-col">
+        <!-- Top Nav -->
+        <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="bg-cyan-500 text-slate-950 font-black text-xs px-2 py-1 rounded uppercase">Admin</span>
+                <h2 class="font-bold text-lg text-slate-200">Campus Control Center</h2>
+            </div>
+            <button id="logout-btn" class="text-xs bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg text-slate-300 transition">
+                Lock Portal
+            </button>
+        </header>
+
+        <!-- Body Content -->
+        <main class="flex-1 max-w-5xl w-full mx-auto p-6 space-y-6">
+            
+            <!-- School Selector -->
+            <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+                <label class="block text-xs font-bold uppercase tracking-wider text-cyan-400 mb-2">Select Target University</label>
+                <select id="school-selector" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-slate-100 focus:outline-none focus:border-cyan-500 font-medium">
+                    <option value="LASU">Lagos State University (LASU)</option>
+                    <option value="UNILAG">University of Lagos (UNILAG)</option>
+                    <option value="UI">University of Ibadan (UI)</option>
+                    <option value="OAU">Obafemi Awolowo University (OAU)</option>
+                    <option value="OOU">Olabisi Onabanjo University (OOU)</option>
+                </select>
+            </section>
+
+            <!-- Configuration Form -->
+            <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-3">
+                    Branding & Assets Configuration (<span id="active-school-name" class="text-cyan-400">LASU</span>)
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Logo URL -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-2">School Logo Image URL</label>
+                        <input type="url" id="logo-url-input" placeholder="https://example.com/logo.png" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                    </div>
+
+                    <!-- Campus Display Name Override -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-2">Campus Custom Title</label>
+                        <input type="text" id="campus-title-input" placeholder="e.g. LASU Sports League" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                    </div>
+                </div>
+
+                <!-- Live Campus Notice Banner -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-2">Campus Live Announcement Banner</label>
+                    <textarea id="announcement-input" rows="3" placeholder="e.g. LASU VC Cup Finals start this Friday! Predict matches to earn 50 bonus coins."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500"></textarea>
+                </div>
+
+                <!-- Action Button -->
+                <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+                    <span id="save-status" class="text-xs text-emerald-400 font-medium hidden">✓ Changes saved successfully</span>
+                    <button id="save-config-btn" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-6 py-3 rounded-lg text-sm transition uppercase tracking-wider">
+                        Save University Config
+                    </button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const AUTH_KEY = 'TOAA';
+        const CONFIG_KEY = 'XENIXBET_SCHOOL_CONFIGS';
+
+        // Elements
+        const authScreen = document.getElementById('auth-screen');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const loginForm = document.getElementById('login-form');
+        const adminPass = document.getElementById('admin-pass');
+        const authError = document.getElementById('auth-error');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        const schoolSelector = document.getElementById('school-selector');
+        const activeSchoolName = document.getElementById('active-school-name');
+        const logoUrlInput = document.getElementById('logo-url-input');
+        const campusTitleInput = document.getElementById('campus-title-input');
+        const announcementInput = document.getElementById('announcement-input');
+        const saveConfigBtn = document.getElementById('save-config-btn');
+        const saveStatus = document.getElementById('save-status');
+
+        // Check active session
+        if (sessionStorage.getItem('XENIX_ADMIN_AUTH') === 'true') {
+            showDashboard();
+        }
+
+        // Login Logic
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (adminPass.value === AUTH_KEY) {
+                sessionStorage.setItem('XENIX_ADMIN_AUTH', 'true');
+                authError.classList.add('hidden');
+                showDashboard();
+            } else {
+                authError.classList.remove('hidden');
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('XENIX_ADMIN_AUTH');
+            adminDashboard.classList.add('hidden');
+            authScreen.classList.remove('flex');
+            authScreen.classList.remove('hidden');
+            adminPass.value = '';
+        });
+
+        function showDashboard() {
+            authScreen.classList.add('hidden');
+            authScreen.classList.remove('flex');
+            adminDashboard.classList.remove('hidden');
+            loadSchoolConfig(schoolSelector.value);
+        }
+
+        // Load specific school configuration
+        schoolSelector.addEventListener('change', (e) => {
+            loadSchoolConfig(e.target.value);
+        });
+
+        function getConfigs() {
+            return JSON.parse(localStorage.getItem(CONFIG_KEY) || '{}');
+        }
+
+        function loadSchoolConfig(schoolCode) {
+            activeSchoolName.textContent = schoolCode;
+            const configs = getConfigs();
+            const schoolData = configs[schoolCode] || {};
+
+            logoUrlInput.value = schoolData.logoUrl || '';
+            campusTitleInput.value = schoolData.title || `${schoolCode} Campus League`;
+            announcementInput.value = schoolData.announcement || '';
+        }
+
+        // Save Config
+        saveConfigBtn.addEventListener('click', () => {
+            const schoolCode = schoolSelector.value;
+            const configs = getConfigs();
+
+            configs[schoolCode] = {
+                logoUrl: logoUrlInput.value,
+                title: campusTitleInput.value,
+                announcement: announcementInput.value,
+                updatedAt: new Date().toISOString()
+            };
+
+            localStorage.setItem(CONFIG_KEY, JSON.stringify(configs));
+
+            saveStatus.classList.remove('hidden');
+            setTimeout(() => saveStatus.classList.add('hidden'), 3000);
+        });
+    </script>
+</body>
+</html>
