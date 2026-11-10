@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="YOUR_UNIQUE_CODE_HERE" />
+    <meta property="og:image" content="https://oluwatosinadedokun654-hash.github.io/Xenixbet/og-image.jpg">
+    <title>XENIXbet | Student Campus Betting</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0b1120;
+            color: #f1f5f9;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .glass {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* LIGHT / WHITE MODE STYLES */
+        body.light-mode {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        body.light-mode .glass {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+        body.light-mode .bg-slate-900,
+        body.light-mode .bg-slate-900\/80,
+        body.light-mode .bg-slate-900\/90,
+        body.light-mode .bg-slate-900\/60 {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+        body.light-mode .bg-slate-950 {
+            background-color: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        body.light-mode .text-slate-100,
+        body.light-mode .text-slate-200,
+        body.light-mode .text-slate-300,
+        body.light-mode .text-white {
+            color: #0f172a !important;
+        }
+        body.light-mode .text-slate-400,
+        body.light-mode .text-slate-500 {
+            color: #475569 !important;
+        }
+        body.light-mode .border-slate-800,
+        body.light-mode .border-slate-700 {
+            border-color: #e2e8f0 !important;
+        }
+        body.light-mode input, 
+        body.light-mode select {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+        }
+        body.light-mode .nav-tab-btn:not(.active) {
+            background-color: #ffffff !important;
+            color: #475569 !important;
+            border-color: #e2e8f0 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased relative">
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full px-4 pointer-events-none"></div>
+
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="w-full glass sticky top-0 z-40 border-b border-slate-800 px-4 py-3">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="if(currentUser) switchNavTab('matches')">
+                <div class="bg-sky-500/20 text-sky-400 p-2 rounded-xl">
+                    <i class="fas fa-trophy text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black gradient-text tracking-wider" id="school-title-header">XENIXbet</h1>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest hidden sm:block">Campus Virtual Stakes</p>
+                </div>
+            </div>
+
+            <!-- AUTHED USER INFO & THEME TOGGLE -->
+            <div class="flex items-center gap-2">
+                <!-- LIGHT / DARK MODE QUICK SWITCH BUTTON -->
+                <button type="button" onclick="toggleTheme()" title="Switch Light/Dark Mode" class="bg-slate-900 hover:bg-slate-800 text-amber-400 p-2 rounded-xl border border-slate-800 transition text-xs flex items-center gap-1.5 cursor-pointer">
+                    <i id="theme-toggle-icon" class="fas fa-sun text-amber-400"></i>
+                    <span id="theme-toggle-label" class="hidden sm:inline text-[11px] font-semibold text-slate-300">White Mode</span>
+                </button>
+
+                <div id="header-user-bar" class="hidden items-center gap-3">
+                    <button type="button" onclick="openProfileModal()" class="bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-800 flex items-center gap-2 text-xs transition cursor-pointer">
+                        <i class="fas fa-user-circle text-sky-400 text-sm"></i>
+                        <span id="display-username" class="font-semibold text-slate-200">User</span>
+                    </button>
+                    <div class="bg-slate-900 px-3 py-1.5 rounded-full border border-amber-500/30 flex items-center gap-2 text-xs" title="Spendable Wallet Balance">
+                        <i class="fas fa-coins text-amber-400 text-sm"></i>
+                        <span id="display-coin-balance" class="font-bold text-amber-300">0</span>
+                        <span class="text-[10px] text-slate-400">Coins</span>
+                    </div>
+                    <div class="bg-slate-900 px-3 py-1.5 rounded-full border border-purple-500/30 flex items-center gap-2 text-xs" title="Leaderboard Ranking Points">
+                        <i class="fas fa-star text-purple-400 text-sm"></i>
+                        <span id="display-point-balance" class="font-bold text-purple-300">0</span>
+                        <span class="text-[10px] text-slate-400">Pts</span>
+                    </div>
+                    <button type="button" onclick="openProfileModal()" title="Account & Settings" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-xl border border-slate-700 transition text-xs">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ANNOUNCEMENT BANNER -->
+    <div id="campus-announcement-banner" class="hidden bg-cyan-500/10 border-b border-cyan-500/20 px-4 py-2 text-center text-xs text-cyan-300 font-medium"></div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="w-full max-w-6xl mx-auto p-4 flex-grow">
+
+        <!-- ================= AUTHENTICATION VIEW ================= -->
+        <div id="view-auth" class="w-full max-w-md mx-auto my-8 glass p-8 rounded-3xl shadow-2xl relative">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-black gradient-text">Welcome to XENIXbet</h2>
+                <p class="text-xs text-slate-400 mt-2">Sign in to your account or create a new campus profile.</p>
+            </div>
+
+            <!-- AUTH TAB CONTROLS -->
+            <div class="flex bg-slate-900/80 p-1 rounded-xl mb-6 border border-slate-800">
+                <button type="button" id="tab-btn-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-sky-600 text-white">
+                    Login
+                </button>
+                <button type="button" id="tab-btn-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">
+                    Sign Up
+                </button>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1 ml-1">Username / Student Email</label>
+                    <input type="text" id="login-username" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1 ml-1">Password</label>
+                    <input type="password" id="login-password" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none text-white">
+                </div>
+                <button type="submit" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-xl shadow-lg transform active:scale-95 transition text-sm">
+                    ENTER STADIUM
+                </button>
+            </form>
+
+            <!-- SIGN UP FORM -->
+            <form id="form-signup" onsubmit="handleSignupSubmit(event)" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1 ml-1">Desired Username</label>
+                    <input type="text" id="signup-username" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1 ml-1">Student Email</label>
+                    <input type="email" id="signup-email" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1 ml-1">Select University</label>
+                    <select id="signup-university" required onchange="applySchoolBranding(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none text-white">
+                        <option value="LASU">Lagos State University (LASU)</option>
+                        <option value="UNILAG">University of Lagos (UNILAG)</option>
+                        <option value="UI">University of Ibadan (UI)</option>
+                        <option value="OAU">Obafemi Awolowo University (OAU)</option>
+                        <option value="OOU">Olabisi Onabanjo University (OOU)</option>
+                        <option value="ABUAD">Afe Babalola University (ABUAD)</option>
+                        <option value="Covenant University">Covenant University (CU)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1 ml-1">Create Password</label>
+                    <input type="password" id="signup-password" required minlength="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none text-white">
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg transform active:scale-95 transition text-sm">
+                    CREATE ACCOUNT (+5 DAILY COINS)
+                </button>
+            </form>
+        </div>
+
+        <!-- ================= DASHBOARD APP VIEW ================= -->
+        <div id="view-dashboard" class="hidden space-y-6">
+
+            <!-- MAIN NAVIGATION TABS -->
+            <nav class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                <button type="button" onclick="switchNavTab('matches')" id="nav-btn-matches" class="nav-tab-btn active bg-sky-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition whitespace-nowrap">
+                    <i class="fas fa-futbol"></i> Matches
+                </button>
+                <button type="button" onclick="switchNavTab('boost')" id="nav-btn-boost" class="nav-tab-btn bg-slate-800 text-slate-400 hover:text-white px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition whitespace-nowrap border border-slate-700">
+                    <i class="fas fa-gift text-amber-400"></i> Daily Boost
+                </button>
+                <button type="button" onclick="switchNavTab('leaderboard')" id="nav-btn-leaderboard" class="nav-tab-btn bg-slate-800 text-slate-400 hover:text-white px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition whitespace-nowrap border border-slate-700">
+                    <i class="fas fa-medal text-yellow-400"></i> Leaderboard (Points)
+                </button>
+                <button type="button" onclick="switchNavTab('bets')" id="nav-btn-bets" class="nav-tab-btn bg-slate-800 text-slate-400 hover:text-white px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition whitespace-nowrap border border-slate-700">
+                    <i class="fas fa-history text-sky-400"></i> My Bets
+                </button>
+            </nav>
+
+            <!-- TAB 1: MATCHES VIEW -->
+            <section id="tab-content-matches" class="dashboard-tab space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold">Upcoming Campus Matches</h3>
+                        <p class="text-xs text-slate-400">Select a fixture to stake coins. Win bets to gain Leaderboard Points!</p>
+                    </div>
+                </div>
+                <div id="matches-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Matches rendered dynamically -->
+                </div>
+            </section>
+
+            <!-- TAB 2: DAILY BOOST -->
+            <section id="tab-content-boost" class="dashboard-tab hidden space-y-6">
+                <div class="glass p-6 rounded-3xl border-l-4 border-sky-500 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-amber-500/20 text-amber-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Daily Bonus</span>
+                            <span id="ad-views-counter-badge" class="text-xs text-slate-400 font-semibold">5 / 5 available</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold mt-2">Watch Sponsored Ad</h3>
+                        <p class="text-slate-400 text-sm mt-1">Earn +2 Free Coins instantly per ad watched. Limits reset automatically every midnight.</p>
+                    </div>
+                    <button id="ad-reward-btn" onclick="watchAdReward()" class="w-full md:w-auto bg-sky-600 hover:bg-sky-500 text-white px-8 py-3 rounded-2xl font-bold shadow-lg transition active:scale-95 flex items-center justify-center gap-2 text-sm whitespace-nowrap">
+                        <i class="fas fa-play-circle"></i> Watch Ad (+2 Coins)
+                    </button>
+                </div>
+            </section>
+
+            <!-- TAB 3: LEADERBOARD VIEW -->
+            <section id="tab-content-leaderboard" class="dashboard-tab hidden space-y-6">
+                <div class="glass p-6 rounded-3xl border border-slate-800 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-sky-400">Campus Competition</span>
+                            <h3 class="text-2xl font-black mt-1">Points Leaderboard</h3>
+                            <p class="text-slate-400 text-sm mt-2">Rankings are determined by total Points won from successful bets.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                            <div>
+                                <p class="text-xs text-slate-400">Your Leaderboard Rank</p>
+                                <p id="user-rank-display" class="text-2xl font-black text-sky-400">#--</p>
+                            </div>
+                            <span class="bg-sky-500/10 text-sky-300 text-xs px-3 py-1 rounded-full font-semibold">Live Points Standings</span>
+                        </div>
+                        <div id="leaderboard-list" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: MY BETS VIEW -->
+            <section id="tab-content-bets" class="dashboard-tab hidden space-y-4">
+                <div class="glass p-6 rounded-3xl border border-slate-800">
+                    <h3 class="font-bold text-lg mb-4">Your Bet History</h3>
+                    <div id="bets-history-container" class="space-y-3">
+                        <p class="text-slate-400 text-sm">No bets placed yet.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full border-t border-slate-800/80 py-4 text-center text-xs text-slate-500">
+        <p>XENIXbet &copy; 2026 | Campus Virtual Sports Competition System</p>
+    </footer>
+
+    <!-- PROFILE MODAL -->
+    <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass max-w-lg w-full p-6 rounded-3xl border border-slate-700 space-y-5 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-user-circle text-sky-400 text-xl"></i>
+                    <h3 class="font-bold text-base text-white">Student Profile</h3>
+                </div>
+                <button onclick="closeProfileModal()" class="text-slate-400 hover:text-white"><i class="fas fa-times text-lg"></i></button>
+            </div>
+            <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase block">Username</span>
+                    <strong id="prof-modal-username" class="text-xs text-sky-400">--</strong>
+                </div>
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase block">University</span>
+                    <strong id="prof-modal-university" class="text-xs text-emerald-400">--</strong>
+                </div>
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase block">Coins</span>
+                    <strong id="prof-modal-coins" class="text-xs text-amber-400">0</strong>
+                </div>
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase block">Leaderboard Pts</span>
+                    <strong id="prof-modal-points" class="text-xs text-purple-400">0</strong>
+                </div>
+            </div>
+            <button onclick="handleLogout()" class="w-full bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-800 font-bold py-2.5 rounded-xl transition text-xs flex items-center justify-center gap-2">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </button>
+        </div>
+    </div>
+
+    <!-- BET MODAL -->
+    <div id="bet-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass max-w-md w-full p-6 rounded-3xl border border-slate-700 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 id="modal-match-title" class="font-bold text-base">Match Bet Slip</h3>
+                <button onclick="closeBetModal()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="modal-match-details" class="text-xs text-slate-300"></div>
+
+            <div class="space-y-2">
+                <label class="block text-xs text-slate-400 uppercase">Stake Amount (Coins)</label>
+                <input type="number" id="modal-stake-input" min="1" value="10" oninput="calculatePayout()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm font-bold text-white outline-none">
+            </div>
+
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+                <span class="text-slate-400">Potential Returns / Points:</span>
+                <span id="modal-potential-payout" class="font-bold text-amber-400 text-sm">0 Coins</span>
+            </div>
+
+            <button onclick="confirmPlaceBet()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-xl transition text-sm">
+                CONFIRM BET & STAKE COINS
+            </button>
+        </div>
+    </div>
+
+    <!-- COMPLETE SCRIPT -->
+    <script>
+        let currentUser = null;
+        let activeBetSelection = null;
+        const USERS_DB_KEY = 'xenix_users';
+        const SESSION_USER_KEY = 'xenix_current_user';
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('xenix_theme') || 'dark';
+            if (savedTheme === 'light') document.body.classList.add('light-mode');
+            else document.body.classList.remove('light-mode');
+        }
+
+        function toggleTheme() {
+            const isLight = document.body.classList.toggle('light-mode');
+            localStorage.setItem('xenix_theme', isLight ? 'light' : 'dark');
+        }
+
+        function applySchoolBranding(selectedSchoolCode) {
+            const configs = JSON.parse(localStorage.getItem('XENIXBET_SCHOOL_CONFIGS') || '{}');
+            const schoolData = configs[selectedSchoolCode];
+            if (schoolData) {
+                const titleEl = document.getElementById('school-title-header');
+                if (titleEl && schoolData.title) titleEl.textContent = schoolData.title;
+                const bannerEl = document.getElementById('campus-announcement-banner');
+                if (bannerEl && schoolData.announcement) {
+                    bannerEl.textContent = schoolData.announcement;
+                    bannerEl.classList.remove('hidden');
+                }
+            }
+        }
+
+        async function hashPassword(str) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(str);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            seedInitialData();
+            checkSession();
+        });
+
+        function seedInitialData() {
+            if (!localStorage.getItem('xenix_matches')) {
+                const defaultMatches = [
+                    { id: 'm1', home: 'Fine Arts', away: 'Computer Science', odds: { '1': 1.85, 'X': 3.10, '2': 2.77 }, status: 'scheduled' },
+                    { id: 'm2', home: 'Architecture', away: 'Estate Management', odds: { '1': 2.20, 'X': 2.90, '2': 1.95 }, status: 'scheduled' }
+                ];
+                localStorage.setItem('xenix_matches', JSON.stringify(defaultMatches));
+            }
+            if (!localStorage.getItem(USERS_DB_KEY)) {
+                localStorage.setItem(USERS_DB_KEY, JSON.stringify([]));
+            }
+            if (!localStorage.getItem('xenix_bets')) {
+                localStorage.setItem('xenix_bets', JSON.stringify([]));
+            }
+        }
+
+        function checkSession() {
+            const storedUser = localStorage.getItem(SESSION_USER_KEY);
+            if (storedUser) {
+                currentUser = storedUser;
+                document.getElementById('view-auth').classList.add('hidden');
+                document.getElementById('view-dashboard').classList.remove('hidden');
+                document.getElementById('header-user-bar').classList.remove('hidden');
+                document.getElementById('header-user-bar').classList.add('flex');
+                updateUI();
+            } else {
+                document.getElementById('view-auth').classList.remove('hidden');
+                document.getElementById('view-dashboard').classList.add('hidden');
+                document.getElementById('header-user-bar').classList.add('hidden');
+                document.getElementById('header-user-bar').classList.remove('flex');
+            }
+        }
+
+        function switchAuthTab(tab) {
+            const loginBtn = document.getElementById('tab-btn-login');
+            const signupBtn = document.getElementById('tab-btn-signup');
+            const loginForm = document.getElementById('form-login');
+            const signupForm = document.getElementById('form-signup');
+
+            if (tab === 'login') {
+                loginBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-sky-600 text-white";
+                signupBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+            } else {
+                signupBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-emerald-600 text-white";
+                loginBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
+                signupForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            const usernameInput = document.getElementById('login-username').value.trim();
+            const passwordInput = document.getElementById('login-password').value;
+            const users = JSON.parse(localStorage.getItem(USERS_DB_KEY)) || [];
+            const passHash = await hashPassword(passwordInput);
+
+            const user = users.find(u => u.username.toLowerCase() === usernameInput.toLowerCase() || (u.email && u.email.toLowerCase() === usernameInput.toLowerCase()));
+
+            if (user && user.passHash === passHash) {
+                currentUser = user.username;
+                localStorage.setItem(SESSION_USER_KEY, currentUser);
+                applySchoolBranding(user.university);
+                checkSession();
+            } else {
+                alert('Invalid credentials.');
+            }
+        }
+
+        async function handleSignupSubmit(e) {
+            e.preventDefault();
+            const username = document.getElementById('signup-username').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const university = document.getElementById('signup-university').value;
+            const password = document.getElementById('signup-password').value;
+
+            let users = JSON.parse(localStorage.getItem(USERS_DB_KEY)) || [];
+            if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
+                alert('Username taken.');
+                return;
+            }
+
+            const passHash = await hashPassword(password);
+            users.push({ username, email, university, passHash, coins: 50, points: 0 });
+            localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
+
+            currentUser = username;
+            localStorage.setItem(SESSION_USER_KEY, currentUser);
+            applySchoolBranding(university);
+            checkSession();
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem(SESSION_USER_KEY);
+            closeProfileModal();
+            checkSession();
+        }
+
+        function switchNavTab(tabName) {
+            ['matches', 'boost', 'leaderboard', 'bets'].forEach(t => {
+                const btn = document.getElementById(`nav-btn-${t}`);
+                const content = document.getElementById(`tab-content-${t}`);
+                if (!btn || !content) return;
+                if (t === tabName) {
+                    btn.classList.add('bg-sky-600', 'text-white', 'active');
+                    content.classList.remove('hidden');
+                } else {
+                    btn.classList.remove('bg-sky-600', 'text-white', 'active');
+                    content.classList.add('hidden');
+                }
+            });
+            updateUI();
+        }
+
+        function getUserData(username) {
+            const users = JSON.parse(localStorage.getItem(USERS_DB_KEY)) || [];
+            return users.find(u => u.username.toLowerCase() === username.toLowerCase()) || { coins: 0, points: 0, university: '' };
+        }
+
+        function renderMatches() {
+            const matches = JSON.parse(localStorage.getItem('xenix_matches')) || [];
+            const container = document.getElementById('matches-container');
+            if (!container) return;
+            const scheduled = matches.filter(m => m.status === 'scheduled');
+            container.innerHTML = scheduled.map(m => `
+                <div class="glass p-5 rounded-3xl border border-slate-800 space-y-4">
+                    <div class="flex items-center justify-between text-xs text-slate-400 pb-2 border-b border-slate-800">
+                        <span class="bg-sky-500/10 text-sky-400 px-2.5 py-0.5 rounded-full font-bold uppercase">Live Fixture</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 text-sm font-black text-center">
+                        <span class="text-slate-100 flex-1">${m.home}</span>
+                        <span class="px-2 text-xs text-amber-400 font-bold">VS</span>
+                        <span class="text-slate-100 flex-1">${m.away}</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="openBetModal('${m.id}', '1')" class="bg-slate-900 border border-slate-700 p-2.5 rounded-xl text-xs font-bold text-sky-400">1 (${m.odds['1']})</button>
+                        <button onclick="openBetModal('${m.id}', 'X')" class="bg-slate-900 border border-slate-700 p-2.5 rounded-xl text-xs font-bold text-sky-400">X (${m.odds['X']})</button>
+                        <button onclick="openBetModal('${m.id}', '2')" class="bg-slate-900 border border-slate-700 p-2.5 rounded-xl text-xs font-bold text-sky-400">2 (${m.odds['2']})</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openBetModal(matchId, pick) {
+            const matches = JSON.parse(localStorage.getItem('xenix_matches')) || [];
+            const match = matches.find(m => m.id === matchId);
+            if (!match) return;
+            activeBetSelection = { matchId, pick, odds: match.odds[pick], home: match.home, away: match.away };
+            document.getElementById('modal-match-title').textContent = `${match.home} vs ${match.away}`;
+            document.getElementById('modal-match-details').innerHTML = `<p>Pick: <strong>${pick}</strong> @ <strong>${match.odds[pick]}</strong></p>`;
+            calculatePayout();
+            document.getElementById('bet-modal').classList.remove('hidden');
+        }
+
+        function closeBetModal() {
+            document.getElementById('bet-modal').classList.add('hidden');
+            activeBetSelection = null;
+        }
+
+        function calculatePayout() {
+            if (!activeBetSelection) return;
+            const stake = parseFloat(document.getElementById('modal-stake-input').value) || 0;
+            document.getElementById('modal-potential-payout').textContent = `${Math.round(stake * activeBetSelection.odds * 100) / 100} Coins`;
+        }
+
+        function confirmPlaceBet() {
+            if (!activeBetSelection || !currentUser) return;
+            const stake = parseInt(document.getElementById('modal-stake-input').value);
+            let users = JSON.parse(localStorage.getItem(USERS_DB_KEY)) || [];
+            let u = users.find(x => x.username.toLowerCase() === currentUser.toLowerCase());
+            if (!u || u.coins < stake) {
+                alert('Insufficient coins!');
+                return;
+            }
+            u.coins -= stake;
+            localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
+
+            let bets = JSON.parse(localStorage.getItem('xenix_bets')) || [];
+            bets.push({
+                id: 'b_' + Date.now(),
+                user: currentUser,
+                matchTitle: `${activeBetSelection.home} vs ${activeBetSelection.away}`,
+                pick: activeBetSelection.pick,
+                stake: stake,
+                odds: activeBetSelection.odds,
+                status: 'pending'
+            });
+            localStorage.setItem('xenix_bets', JSON.stringify(bets));
+            closeBetModal();
+            updateUI();
+        }
+
+        function openProfileModal() {
+            if (!currentUser) return;
+            const data = getUserData(currentUser);
+            document.getElementById('prof-modal-username').textContent = currentUser;
+            document.getElementById('prof-modal-university').textContent = data.university || 'N/A';
+            document.getElementById('prof-modal-coins').textContent = data.coins;
+            document.getElementById('prof-modal-points').textContent = data.points || 0;
+            document.getElementById('profile-modal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        function updateUI() {
+            if (!currentUser) return;
+            const data = getUserData(currentUser);
+            document.getElementById('display-username').textContent = currentUser;
+            document.getElementById('display-coin-balance').textContent = data.coins;
+            document.getElementById('display-point-balance').textContent = data.points || 0;
+            renderMatches();
+        }
+    </script>
+</body>
+</html>
