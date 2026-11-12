@@ -3,179 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XENIXbet - Secure Multi-Campus Admin Gateway</title>
+    <title>XENIXbet - Multi-Campus Admin Gateway</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col justify-center items-center p-4">
 
     <!-- AUTH GATEWAY -->
-    <div id="auth-screen" class="bg-slate-900 border border-slate-800 p-8 rounded-2xl w-full max-w-md shadow-2xl">
+    <div id="auth-screen" class="bg-slate-900 border border-slate-800 p-8 rounded-3xl w-full max-w-md shadow-2xl">
         <div class="text-center mb-6">
-            <span class="bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest">Restricted Access</span>
-            <h1 class="text-2xl font-black text-cyan-400 tracking-wider uppercase mt-3">Admin Gateway</h1>
-            <p class="text-xs text-slate-400 mt-1">Verify institutional clearance to proceed</p>
+            <span class="bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Restricted Institutional Access</span>
+            <h1 class="text-2xl font-black text-cyan-400 tracking-wider uppercase mt-3">Campus Admin Gateway</h1>
+            <p class="text-xs text-slate-400 mt-1">Authenticate institutional clearance to manage your campus</p>
         </div>
         
-        <form id="login-form" class="space-y-4">
-            <!-- School Target -->
+        <form id="admin-login-form" class="space-y-4">
+            <!-- Target University Dropdown -->
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Target University</label>
-                <select id="admin-school-select" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
-                    <option value="" disabled selected>Select Institution</option>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Target University</label>
+                <select id="admin-school-select" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                    <option value="" disabled selected>Select Campus</option>
                     <option value="LASU">Lagos State University (LASU)</option>
                     <option value="UNILAG">University of Lagos (UNILAG)</option>
                     <option value="UI">University of Ibadan (UI)</option>
                     <option value="OAU">Obafemi Awolowo University (OAU)</option>
                     <option value="OOU">Olabisi Onabanjo University (OOU)</option>
                     <option value="ABUAD">Afe Babalola University (ABUAD)</option>
+                    <option value="Covenant University">Covenant University (CU)</option>
                 </select>
             </div>
 
             <!-- Admin Username -->
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Admin Username</label>
-                <input type="text" id="admin-username" placeholder="e.g. tosin_admin" required 
-                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Admin Username</label>
+                <input type="text" id="admin-username" placeholder="e.g. abuad_admin" required 
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
             </div>
 
-            <!-- Password -->
+            <!-- Access Key -->
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Access Key</label>
-                <input type="password" id="admin-pass" placeholder="Enter Password" required 
-                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Access Key</label>
+                <input type="password" id="admin-pass" placeholder="Enter Access Password" required 
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
             </div>
 
-            <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-lg transition uppercase tracking-wider text-sm">
+            <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl transition uppercase tracking-wider text-sm shadow-lg">
                 Authenticate Session
             </button>
-            <p id="auth-error" class="text-red-400 text-xs text-center hidden font-medium">Access Denied: Invalid Credentials</p>
+            <p id="auth-error" class="text-red-400 text-xs text-center hidden font-medium">Access Denied: Invalid Access Key or Credentials</p>
         </form>
+
+        <div class="mt-6 text-center border-t border-slate-800/80 pt-4">
+            <a href="index.html" class="text-xs text-slate-400 hover:text-white transition">
+                ← Return to Public Student Platform
+            </a>
+        </div>
     </div>
 
-    <!-- MAIN ADMIN DASHBOARD (Hidden by default) -->
-    <div id="admin-dashboard" class="hidden w-full max-w-4xl min-h-screen flex flex-col py-6">
-        <header class="bg-slate-900 border border-slate-800 px-6 py-4 rounded-2xl flex items-center justify-between mb-6">
+    <!-- ISOLATED CAMPUS ADMIN DASHBOARD (Hidden by default) -->
+    <div id="admin-dashboard" class="hidden w-full max-w-4xl min-h-screen flex flex-col py-6 space-y-6">
+        
+        <!-- HEADER BAR -->
+        <header class="bg-slate-900 border border-slate-800 px-6 py-4 rounded-2xl flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <span class="bg-cyan-500 text-slate-950 font-black text-xs px-2.5 py-1 rounded uppercase">Active Admin</span>
+                <span class="bg-cyan-500 text-slate-950 font-black text-xs px-2.5 py-1 rounded uppercase">Campus Admin</span>
                 <div>
                     <h2 class="font-bold text-sm text-slate-200" id="logged-admin-display">Admin</h2>
                     <p class="text-[10px] text-cyan-400 font-mono uppercase" id="logged-school-display">LASU</p>
                 </div>
             </div>
-            <button id="logout-btn" class="text-xs bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg text-slate-300 transition font-semibold">
-                Lock Session
-            </button>
-        </header>
-
-        <main class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 flex-1">
-            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-3">
-                Campus Configuration Management
-            </h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-2">Custom Logo URL</label>
-                    <input type="url" id="logo-url-input" placeholder="https://example.com/logo.png" 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-2">Campus Title Override</label>
-                    <input type="text" id="campus-title-input" placeholder="e.g. LASU Champions League" 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-2">Live Announcement Broadcast</label>
-                <textarea id="announcement-input" rows="3" placeholder="Broadcast match updates..."
-                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-cyan-500"></textarea>
-            </div>
-
-            <div class="flex items-center justify-between pt-4 border-t border-slate-800">
-                <span id="save-status" class="text-xs text-emerald-400 font-medium hidden">✓ Changes synchronized successfully</span>
-                <button id="save-config-btn" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-6 py-3 rounded-lg text-sm transition uppercase tracking-wider">
-                    Commit Changes
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 px-3.5 py-2 rounded-xl text-slate-300 transition">
+                    Preview Student Site
+                </a>
+                <button id="logout-btn" onclick="handleAdminLogout()" class="text-xs bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-800 px-3.5 py-2 rounded-xl transition font-semibold">
+                    Lock Session
                 </button>
             </div>
+        </header>
+
+        <main class="space-y-6 flex-1">
+            
+            <!-- SECTION 1: CAMPUS BRANDING & ANNOUNCEMENTS -->
+            <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">
+                        1. Institutional Branding & Banner Notice
+                    </h3>
+                    <span class="text-xs text-cyan-400 font-mono" id="branding-school-scope">[LASU]</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1.5">School Logo URL</label>
+                        <input type="url" id="logo-url-input" placeholder="https://example.com/logo.png" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1.5">Campus Display Title Override</label>
+                        <input type="text" id="campus-title-input" placeholder="e.g. ABUAD Sports League" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1.5">Live Broadcast Announcement Banner</label>
+                    <textarea id="announcement-input" rows="2" placeholder="e.g. VC Cup Finals kick off on Friday! Stake responsibly."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-500"></textarea>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <span id="branding-save-status" class="text-xs text-emerald-400 font-medium hidden">✓ Institutional settings saved</span>
+                    <button onclick="saveSchoolBranding()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                        Save Branding Settings
+                    </button>
+                </div>
+            </section>
+
+            <!-- SECTION 2: MATCH CREATION (SCOPED strictly to logged campus) -->
+            <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">
+                        2. Create & Publish Campus Match Fixture
+                    </h3>
+                    <span class="text-xs text-slate-400">Scoped strictly to logged-in campus</span>
+                </div>
+
+                <form id="create-match-form" onsubmit="handleCreateMatch(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Home Department / Team</label>
+                            <input type="text" id="match-home" placeholder="e.g. Mechanical Eng." required 
+                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Away Department / Team</label>
+                            <input type="text" id="match-away" placeholder="e.g. Law Faculty" required 
+                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Home Win Odds (1)</label>
+                            <input type="number" step="0.01" min="1.01" id="odds-1" placeholder="1.85" required 
+                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Draw Odds (X)</label>
+                            <input type="number" step="0.01" min="1.01" id="odds-x" placeholder="3.10" required 
+                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Away Win Odds (2)</label>
+                            <input type="number" step="0.01" min="1.01" id="odds-2" placeholder="2.50" required 
+                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition text-xs uppercase tracking-wider">
+                        Publish Live Match Fixture
+                    </button>
+                </form>
+            </section>
+
+            <!-- SECTION 3: MANAGE ACTIVE MATCHES FOR THIS SCHOOL -->
+            <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-3">
+                    3. Managed Active Matches (<span id="active-matches-school-tag" class="text-cyan-400">LASU</span>)
+                </h3>
+                <div id="school-matches-list" class="space-y-3">
+                    <!-- Matches rendered dynamically -->
+                </div>
+            </section>
         </main>
     </div>
 
+    <!-- SCRIPT -->
     <script>
         const AUTH_KEY = 'TOAA';
         const CONFIG_KEY = 'XENIXBET_SCHOOL_CONFIGS';
+        const MATCHES_KEY = 'xenix_matches';
 
-        const authScreen = document.getElementById('auth-screen');
-        const adminDashboard = document.getElementById('admin-dashboard');
-        const loginForm = document.getElementById('login-form');
-        const adminSchoolSelect = document.getElementById('admin-school-select');
-        const adminUsername = document.getElementById('admin-username');
-        const adminPass = document.getElementById('admin-pass');
-        const authError = document.getElementById('auth-error');
-        const logoutBtn = document.getElementById('logout-btn');
+        let currentSchool = '';
+        let currentAdminUser = '';
 
-        const loggedAdminDisplay = document.getElementById('logged-admin-display');
-        const loggedSchoolDisplay = document.getElementById('logged-school-display');
-        const logoUrlInput = document.getElementById('logo-url-input');
-        const campusTitleInput = document.getElementById('campus-title-input');
-        const announcementInput = document.getElementById('announcement-input');
-        const saveConfigBtn = document.getElementById('save-config-btn');
-        const saveStatus = document.getElementById('save-status');
-
-        let currentActiveSchool = '';
-
-        if (sessionStorage.getItem('XENIX_ADMIN_AUTH') === 'true') {
-            currentActiveSchool = sessionStorage.getItem('XENIX_ADMIN_SCHOOL') || 'LASU';
-            loggedAdminDisplay.textContent = sessionStorage.getItem('XENIX_ADMIN_USER') || 'Admin';
-            loggedSchoolDisplay.textContent = currentActiveSchool;
-            showDashboard();
+        function sanitizeInput(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
         }
 
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (adminPass.value === AUTH_KEY && adminSchoolSelect.value && adminUsername.value.trim() !== '') {
-                currentActiveSchool = adminSchoolSelect.value;
-                sessionStorage.setItem('XENIX_ADMIN_AUTH', 'true');
-                sessionStorage.setItem('XENIX_ADMIN_SCHOOL', currentActiveSchool);
-                sessionStorage.setItem('XENIX_ADMIN_USER', adminUsername.value.trim());
-                
-                loggedAdminDisplay.textContent = adminUsername.value.trim();
-                loggedSchoolDisplay.textContent = currentActiveSchool;
-
-                authError.classList.add('hidden');
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('XENIX_ADMIN_AUTH') === 'true') {
+                currentSchool = sessionStorage.getItem('XENIX_ADMIN_SCHOOL');
+                currentAdminUser = sessionStorage.getItem('XENIX_ADMIN_USER');
                 showDashboard();
-            } else {
-                authError.classList.remove('hidden');
             }
         });
 
-        logoutBtn.addEventListener('click', () => {
-            sessionStorage.clear();
-            adminDashboard.classList.add('hidden');
-            authScreen.classList.remove('hidden');
-            adminPass.value = '';
-            adminUsername.value = '';
+        document.getElementById('admin-login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const schoolSelect = document.getElementById('admin-school-select').value;
+            const userVal = document.getElementById('admin-username').value.trim();
+            const passVal = document.getElementById('admin-pass').value;
+
+            if (passVal === AUTH_KEY && schoolSelect && userVal !== '') {
+                currentSchool = schoolSelect;
+                currentAdminUser = userVal;
+                sessionStorage.setItem('XENIX_ADMIN_AUTH', 'true');
+                sessionStorage.setItem('XENIX_ADMIN_SCHOOL', currentSchool);
+                sessionStorage.setItem('XENIX_ADMIN_USER', currentAdminUser);
+                
+                document.getElementById('auth-error').classList.add('hidden');
+                showDashboard();
+            } else {
+                document.getElementById('auth-error').classList.remove('hidden');
+            }
         });
 
+        function handleAdminLogout() {
+            sessionStorage.clear();
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('auth-screen').classList.remove('hidden');
+            document.getElementById('admin-pass').value = '';
+        }
+
         function showDashboard() {
-            authScreen.classList.add('hidden');
-            adminDashboard.classList.remove('hidden');
-            loadSchoolConfig(currentActiveSchool);
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('admin-dashboard').classList.remove('hidden');
+            
+            document.getElementById('logged-admin-display').textContent = currentAdminUser;
+            document.getElementById('logged-school-display').textContent = currentSchool;
+            document.getElementById('branding-school-scope').textContent = `[${currentSchool}]`;
+            document.getElementById('active-matches-school-tag').textContent = currentSchool;
+
+            loadSchoolBranding();
+            renderSchoolMatches();
         }
 
-        function loadSchoolConfig(schoolCode) {
+        function loadSchoolBranding() {
             const configs = JSON.parse(localStorage.getItem(CONFIG_KEY) || '{}');
-            const schoolData = configs[schoolCode] || {};
-            logoUrlInput.value = schoolData.logoUrl || '';
-            campusTitleInput.value = schoolData.title || `${schoolCode} Campus League`;
-            announcementInput.value = schoolData.announcement || '';
+            const data = configs[currentSchool] || {};
+            document.getElementById('logo-url-input').value = data.logoUrl || '';
+            document.getElementById('campus-title-input').value = data.title || `${currentSchool} Campus League`;
+            document.getElementById('announcement-input').value = data.announcement || '';
         }
 
-        saveConfigBtn.addEventListener('click', () => {
+        function saveSchoolBranding() {
             const configs = JSON.parse(localStorage.getItem(CONFIG_KEY) || '{}');
-            configs[currentActiveSchool] = {
-                logoUrl: logoUrlInput.value,
-                title: campusTitleInput.value,
-                announcement: announcementInput.value,
+            configs[currentSchool] = {
+                logoUrl: document.getElementById('logo-url-input').value.trim(),
+                title: document.getElementById('campus-title-input').value.trim(),
+                announcement: document.getElementById('announcement-input').value.trim(),
+                updatedAt: new Date().toISOString()
+            };
+            localStorage.setItem(CONFIG_KEY, JSON.stringify(configs));
+
+            const status = document.getElementById('branding-save-status');
+            status.classList.remove('hidden');
+            setTimeout(() => status.classList.add('hidden'), 3000);
+        }
+
+        function handleCreateMatch(e) {
+            e.preventDefault();
+            const home = document.getElementById('match-home').value.trim();
+            const away = document.getElementById('match-away').value.trim();
+            const odds1 = parseFloat(document.getElementById('odds-1').value);
+            const oddsX = parseFloat(document.getElementById('odds-x').value);
+            const odds2 = parseFloat(document.getElementById('odds-2').value);
+
+            let matches = JSON.parse(localStorage.getItem(MATCHES_KEY) || '[]');
+            matches.push({
+                id: 'm_' + Date.now(),
+                school: currentSchool,
+                home: home,
+                away: away,
+                odds: { '1': odds1, 'X': oddsX, '2': odds2 },
+                status: 'scheduled',
+                createdAt: new Date().toISOString()
+            });
+
+            localStorage.setItem(MATCHES_KEY, JSON.stringify(matches));
+            document.getElementById('create-match-form').reset();
+            renderSchoolMatches();
+        }
+
+        function deleteMatch(matchId) {
+            let matches = JSON.parse(localStorage.getItem(MATCHES_KEY) || '[]');
+            matches = matches.filter(m => m.id !== matchId);
+            localStorage.setItem(MATCHES_KEY, JSON.stringify(matches));
+            renderSchoolMatches();
+        }
+
+        function renderSchoolMatches() {
+            const matches = JSON.parse(localStorage.getItem(MATCHES_KEY) || '[]');
+            const schoolMatches = matches.filter(m => m.school === currentSchool);
+            const container = document.getElementById('school-matches-list');
+
+            if (schoolMatches.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400">No active matches published for ${currentSchool} yet.</p>`;
+                return;
+            }
+
+            container.innerHTML = schoolMatches.map(m => `
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+                    <div>
+                        <p class="font-bold text-slate-200">${sanitizeInput(m.home)} vs ${sanitizeInput(m.away)}</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Odds: 1 (${m.odds['1']}) | X (${m.odds['X']}) | 2 (${m.odds['2']})</p>
+                    </div>
+                    <button onclick="deleteMatch('${m.id}')" class="bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-800 px-3 py-1.5 rounded-lg text-[10px] font-bold transition">
+                        Delete
+                    </button>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
+```      announcement: announcementInput.value,
                 updatedAt: new Date().toISOString()
             };
             localStorage.setItem(CONFIG_KEY, JSON.stringify(configs));
